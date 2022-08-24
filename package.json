@@ -1,0 +1,11 @@
+{
+  "name": "routingexercise",
+  "version": "1.0.0",
+  "description": "Routing exercise with mean, median, and mode functionalities",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kris Gagne",
+  "license": "ISC"
+}
