@@ -52,6 +52,23 @@ app.get('/median', function calculateMedian(req, res, next) {
     }
 
     let ordered_nums = converted_nums.sort(function(a, b){return a - b});
+
+    if (ordered_nums.length % 2 !== 0) {
+        let idx = (ordered_nums.length + 1) / 2
+        console.log(idx, ordered_nums[idx-1])
+        median = ordered_nums[idx-1]
+        return res.json({'operation': 'median', 'value': median})
+    } else {
+        let idx = (ordered_nums.length + 1) / 2
+        console.log('ORIGINAL IDX', idx)
+        let idxUp = Math.round(idx)
+        let idxDown = Math.floor(idx)
+        console.log('up and down', idxUp, idxDown)
+
+        median = (ordered_nums[idxUp-1] + ordered_nums[idxDown-1]) / 2
+        
+        return res.json({'operation': 'median', 'value': median})
+    }
     
     
 })
