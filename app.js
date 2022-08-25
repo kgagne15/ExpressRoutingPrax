@@ -101,12 +101,19 @@ app.get('/mode', function calculateMode(req, res, next) {
         }
         
         let mode = numCount[converted_nums[0]]
+        
         for (n of converted_nums) {
             if (numCount[n] > mode) {
                 mode = n;
             } 
         }
-        return res.json({'operation': 'mode', 'value': mode})
+
+        if (mode === 1) {
+            return res.json({'operation': 'mode', 'value': converted_nums})
+        } else {
+            return res.json({'operation': 'mode', 'value': mode})
+        }
+        
     } catch(e) {
         next(e);
     }
