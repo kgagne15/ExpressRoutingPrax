@@ -51,7 +51,7 @@ app.get('/median', function calculateMedian(req, res, next) {
                 converted_nums.push(parseInt(split_nums[x]))
             }
         }
-
+        //copied function from one of the links from helpful links doc
         let ordered_nums = converted_nums.sort(function(a, b){return a - b});
 
         if (ordered_nums.length % 2 !== 0) {
@@ -75,8 +75,42 @@ app.get('/median', function calculateMedian(req, res, next) {
     }
 })
 
-
-
+app.get('/mode', function calculateMode(req, res, next) {
+    try {
+        const nums = req.query.nums
+        let split_nums = []
+        let converted_nums = []
+        if (!req.query.nums || req.query.nums.length === 1) {
+            throw new ExpressError('Please enter at least 2 numbers', 400)
+        } else {
+            split_nums = nums.split(',')
+        }
+        for (let x=0; x < split_nums.length; x++) {
+            if (!parseInt(split_nums[x])) {
+                throw new ExpressError('Please enter all valid numbers', 400)
+            } else {
+                converted_nums.push(parseInt(split_nums[x]))
+            }
+        }
+        let numCount = {};
+        for (n of converted_nums) {
+            numCount[n] = 0;
+        }
+        for (n of converted_nums) {
+            numCount[n] += 1;
+        }
+        
+        let mode = numCount[converted_nums[0]]
+        for (n of converted_nums) {
+            if (numCount[n] > mode) {
+                mode = n;
+            } 
+        }
+        return res.json({'operation': 'mode', 'value': mode})
+    } catch(e) {
+        next(e);
+    }
+})
 
 // Error Handling
 app.use(function (err, req, res, next) { //Note the 4 parameters!
