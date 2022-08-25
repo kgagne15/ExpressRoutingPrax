@@ -1,11 +1,12 @@
 const express = require('express');
 const ExpressError = require("./expressError");
+const calculateMean = require('./helpers')
 
 const app = express();
 
 app.use(express.json()); 
 
-app.get('/mean', function calculateMean(req, res, next) {
+app.get('/mean', (req, res, next) => {
 
     try {
         const nums = req.query.nums
@@ -132,6 +133,4 @@ app.use(function (err, req, res, next) { //Note the 4 parameters!
   });
 
 //Server listening
-app.listen(3000, function() {
-    console.log('App on port 3000')
-})
+module.exports = app;
