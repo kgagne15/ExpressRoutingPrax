@@ -35,42 +35,44 @@ app.get('/mean', function calculateMean(req, res, next) {
 });
 
 app.get('/median', function calculateMedian(req, res, next) {
-    const nums = req.query.nums
-    let split_nums = []
-    let converted_nums = []
-    if (!req.query.nums || req.query.nums.length === 1) {
-        throw new ExpressError('Please enter at least 2 numbers', 400)
-    } else {
-        split_nums = nums.split(',')
-    }
-    for (let x=0; x < split_nums.length; x++) {
-        if (!parseInt(split_nums[x])) {
-            throw new ExpressError('Please enter all valid numbers', 400)
+    try {
+        const nums = req.query.nums
+        let split_nums = []
+        let converted_nums = []
+        if (!req.query.nums || req.query.nums.length === 1) {
+            throw new ExpressError('Please enter at least 2 numbers', 400)
         } else {
-            converted_nums.push(parseInt(split_nums[x]))
+            split_nums = nums.split(',')
         }
+        for (let x=0; x < split_nums.length; x++) {
+            if (!parseInt(split_nums[x])) {
+                throw new ExpressError('Please enter all valid numbers', 400)
+            } else {
+                converted_nums.push(parseInt(split_nums[x]))
+            }
+        }
+
+        let ordered_nums = converted_nums.sort(function(a, b){return a - b});
+
+        if (ordered_nums.length % 2 !== 0) {
+            let idx = (ordered_nums.length + 1) / 2
+            console.log(idx, ordered_nums[idx-1])
+            median = ordered_nums[idx-1]
+            return res.json({'operation': 'median', 'value': median})
+        } else {
+            let idx = (ordered_nums.length + 1) / 2
+            console.log('ORIGINAL IDX', idx)
+            let idxUp = Math.round(idx)
+            let idxDown = Math.floor(idx)
+            console.log('up and down', idxUp, idxDown)
+
+            median = (ordered_nums[idxUp-1] + ordered_nums[idxDown-1]) / 2
+            
+            return res.json({'operation': 'median', 'value': median})
+        }
+    } catch(e) {
+        next(e)
     }
-
-    let ordered_nums = converted_nums.sort(function(a, b){return a - b});
-
-    if (ordered_nums.length % 2 !== 0) {
-        let idx = (ordered_nums.length + 1) / 2
-        console.log(idx, ordered_nums[idx-1])
-        median = ordered_nums[idx-1]
-        return res.json({'operation': 'median', 'value': median})
-    } else {
-        let idx = (ordered_nums.length + 1) / 2
-        console.log('ORIGINAL IDX', idx)
-        let idxUp = Math.round(idx)
-        let idxDown = Math.floor(idx)
-        console.log('up and down', idxUp, idxDown)
-
-        median = (ordered_nums[idxUp-1] + ordered_nums[idxDown-1]) / 2
-        
-        return res.json({'operation': 'median', 'value': median})
-    }
-    
-    
 })
 
 
