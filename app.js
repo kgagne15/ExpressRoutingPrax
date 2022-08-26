@@ -1,14 +1,13 @@
 const express = require('express');
 const ExpressError = require("./expressError");
-const calculateMean = require('./helpers')
 
 const app = express();
 
 app.use(express.json()); 
 
 app.get('/mean', (req, res, next) => {
-
     try {
+        //used solution to figure out how to access the nums from a query string
         const nums = req.query.nums
         let split_nums = []
         let converted_nums = []
@@ -52,23 +51,18 @@ app.get('/median', function calculateMedian(req, res, next) {
                 converted_nums.push(parseInt(split_nums[x]))
             }
         }
-        //copied function from one of the links from helpful links doc
+        //copied function from one of the links in helpfullinks doc
         let ordered_nums = converted_nums.sort(function(a, b){return a - b});
-
+        
         if (ordered_nums.length % 2 !== 0) {
             let idx = (ordered_nums.length + 1) / 2
-            console.log(idx, ordered_nums[idx-1])
             median = ordered_nums[idx-1]
             return res.json({'operation': 'median', 'value': median})
         } else {
             let idx = (ordered_nums.length + 1) / 2
-            console.log('ORIGINAL IDX', idx)
             let idxUp = Math.round(idx)
             let idxDown = Math.floor(idx)
-            console.log('up and down', idxUp, idxDown)
-
             median = (ordered_nums[idxUp-1] + ordered_nums[idxDown-1]) / 2
-            
             return res.json({'operation': 'median', 'value': median})
         }
     } catch(e) {

@@ -47,7 +47,7 @@ describe('get median', function() {
 })
 
 describe('get mode', function() {
-    test('get mode from even amount of numbers', async function() {
+    test('get mode from even array of all unique numbers', async function() {
         const resp = await request(app).get(`/mode?nums=1,2,3,4`);
         expect(resp.statusCode).toBe(200);
         expect(resp.body).toEqual({'operation': 'mode', 'value': [1,2,3,4]})
@@ -58,12 +58,12 @@ describe('get mode', function() {
         expect(resp.body).toEqual({'operation': 'mode', 'value': 2})
     });  
     test('get error when not giving numbers', async function() {
-        const resp = await request(app).get(`/median`);
+        const resp = await request(app).get(`/mode`);
         expect(resp.statusCode).toBe(400);
         expect(resp.body).toEqual({'error': { message: 'Please enter at least 2 numbers', 'status': 400 }})
     })
     test('get error when enter a non number', async function() {
-        const resp = await request(app).get(`/median?nums=1,2,foo`);
+        const resp = await request(app).get(`/mode?nums=1,2,foo`);
         expect(resp.statusCode).toBe(400);
         expect(resp.body).toEqual({'error': { message: 'Please enter all valid numbers', 'status': 400 }})
     })
